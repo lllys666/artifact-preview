@@ -2,7 +2,7 @@ const express = require("express");
 const { Octokit } = require("@octokit/core");
 const fs = require("fs");
 const path = require("path");
-const unzipper = require("unzipper");
+const decompress = require("decompress");
 require("dotenv").config();
 
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
@@ -44,27 +44,27 @@ app.post("/download", async (req, res) => {
     // unzip the artifact
     const dirPath = path.join(__dirname, "download", artifactId);
     // fs.mkdirSync(dirPath);
-    fs.createReadStream(zipPath)
-      .pipe(unzipper.Extract({ path: dirPath }))
-      .on("error", (err) => {
-        console.error("[ERROR] Error unzipping the file:", err);
-        throw new Error("Zip file corrupted");
-      })
-      .on("finish", () => {
+    decompress(zipPath, dirPath)
+      .then(() => {
         console.log("[INFO] ZIP file extracted successfully.");
         // Delete the zip file
         fs.unlinkSync(zipPath);
+      })
+      .catch((error) => {
+        console.log("[ERROR] ZIP file failed to extract:", error);
+        throw error;
       });
 
     res.send({ url: `domain.com/download/${artifactId}` });
   } catch (error) {
     if (error.response !== undefined) {
+      console.log("[ERROR] Github Error");
       res.status(503).send(error.response.data);
     } else {
+      console.log("[ERROR] Script Error");
       res.status(503).send(error.message);
     }
   }
-  console.log(`[INFO] END of this Artifact: ${artifactId}`);
 });
 
 app.listen(3000, () => console.log("Listening on port 3000!"));
