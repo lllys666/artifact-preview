@@ -29,3 +29,6 @@ test/**/*.log
 build/
 dist/
 out/
+
+# cache files
+download/
