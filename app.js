@@ -55,7 +55,7 @@ app.post("/download", async (req, res) => {
         throw error;
       });
 
-    res.send({ url: `domain.com/download/${artifactId}` });
+    res.send({ url: `https://${process.env.DOMAIN}/download/${artifactId}` });
   } catch (error) {
     if (error.response !== undefined) {
       console.log("[ERROR] Github Error");
@@ -65,6 +65,26 @@ app.post("/download", async (req, res) => {
       res.status(503).send(error.message);
     }
   }
+});
+
+app.get("/download/:id", function (req, res, next) {
+  // Get the artifact id from the URL parameter
+  const artifactId = req.params.id;
+  // Construct the full file path
+  const filePath = path.join(
+    __dirname,
+    "download",
+    artifactId,
+    "oi-wiki-export.pdf"
+  );
+
+  // Use res.download to serve the file for download
+  res.download(filePath, (err) => {
+    if (err) {
+      // Handle errors, e.g., file not found
+      res.status(404).send("File not found");
+    }
+  });
 });
 
 app.listen(3000, () => console.log("Listening on port 3000!"));
