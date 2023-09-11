@@ -1,0 +1,19 @@
+{
+  "name": "artifact-preview",
+  "version": "1.0.0",
+  "description": "A service for previewing Github Actions artifact.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lllys666/artifact-preview.git"
+  },
+  "author": "lllys666",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lllys666/artifact-preview/issues"
+  },
+  "homepage": "https://github.com/lllys666/artifact-preview#readme"
+}
