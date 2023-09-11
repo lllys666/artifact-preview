@@ -10,8 +10,8 @@ node v18.17.1
 
 ### Variables in `.env` files
 ```
-GITHUB_TOKEN="your-github-personal-access-token"
-domain="your-domain"
+GITHUB_TOKEN="YOUR-GITHUB-PERSONAL-ACCESS-TOKEN"
+DOMAIN="YOURDOMAIN.COM"
 ```
 
 
@@ -25,6 +25,6 @@ Sample Response:
 
 ```json
 {
-    "url": "domain.com/download/3476234"
+    "url": "somedomain.com/download/3476234"
 }
 ```
