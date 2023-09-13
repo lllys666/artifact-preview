@@ -43,11 +43,10 @@ app.post("/download", async (req, res) => {
 
     // unzip the artifact
     const dirPath = path.join(__dirname, "download", artifactId);
-    // fs.mkdirSync(dirPath);
     decompress(zipPath, dirPath)
       .then(() => {
         console.log("[INFO] ZIP file extracted successfully.");
-        // Delete the zip file
+        // delete the zip file
         fs.unlinkSync(zipPath);
       })
       .catch((error) => {
@@ -70,6 +69,23 @@ app.post("/download", async (req, res) => {
 app.get("/download/:id", function (req, res, next) {
   // Get the artifact id from the URL parameter
   const artifactId = req.params.id;
+
+  const dirPath = path.join(__dirname, "download", artifactId);
+
+  fs.readdir(dirPath, (err, files) => {
+    if (err) {
+      console.error("Error reading directory:", err);
+      return res.status(500).send("Internal Server Error");
+    }
+
+    // Check if there is exactly one file in the directory
+    if (files.length !== 1) {
+      return res.status(404).send("No file found or multiple files found");
+    }
+
+    const fileName = files[0]; // Get the name of the file
+  });
+
   // Construct the full file path
   const filePath = path.join(
     __dirname,
